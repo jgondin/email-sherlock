@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block body %}
+  <section class="header">
+    <h2 class="title">Email Smart Scanner! </h2>
+  </section>
+  <hr/>
+
+  <div class="content">
+    <h3>Please enter with term or sentence to start your search.</h3>
+    <form method="POST">
+      {{ form.hidden_tag() }}
+      <div class="row">
+        <div class="one column">
+          {{ form.term_search.label }} {{ form.term_search() }}
+        </div>
+      </div>
+      <div class="row">
+        <button type="submit" class="button-primary">Submit</button>
+      </div>
+    </form>
+    
+  </div>
+{% endblock body %}
+
+{% block js %}
+  <script type="text/javascript">
+
+  </script>
+{% endblock js %}

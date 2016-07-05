@@ -1,0 +1,7 @@
+certifi
+csvkit~=0.9
+pdfminer==20110515
+peewee~=2.6
+requests~=2.7
+requests-cache~=0.4
+slate==0.3
