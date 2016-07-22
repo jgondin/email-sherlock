@@ -5,9 +5,7 @@ from spacy.en import English
 parser = English()
 from sklearn.grid_search import GridSearchCV
 
-from multiprocessing import Pool
 from textblob import TextBlob
-
 
 import nltk.sentiment as sentiment
 from nltk.corpus import stopwords
@@ -39,13 +37,19 @@ SYMBOLS = " ".join(string.punctuation).split(" ")
 
 print('load data...')
 
-conn = connect('../hrcemail.sqlite')
-c = conn.cursor()
+conn = connect('../data/hrc_emails/hrcemail.sqlite')
 
-c.execute('SELECT d."docID", n.commonName, d."docDate", d."from", d."to", d.subject, d."docText" FROM document d JOIN name n ON d."from"=n.originalName WHERE n.commonName="Hillary Clinton"')
-df_document = pd.DataFrame(c.fetchall(), columns=[h for h,_ ,_ ,_ ,_ ,_ ,_  in c.description])
-c.close()
+
+sql = """
+        SELECT d."docID", n.commonName, d."docDate", d."from", d."to", d.subject, d."docText"
+        FROM document d JOIN name n ON d."from"=n.originalName 
+        WHERE n.commonName="Hillary Clinton;"
+       """
+df_document = pd.read_sql_query(sql, conn)
+print(df_document.head())
+
 conn.close()
+
 df_document.docDate = pd.to_datetime(df_document.docDate, format='%Y-%m-%d')
 
 def clean_email(email, subject):
