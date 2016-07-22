@@ -26,13 +26,13 @@ source virt-hrcemail/bin/activate
 
 Install all the Python dependencies. 
 ```
-pip install -r requirements.txt
+pip install -r email-download/requirements.txt
 ```
 
 Then, run the shell script.
 
 ```
-./run.sh
+./email-download/run.sh
 ```
 
 You will need `wget` to download the PDFs and `pdftotext` to convert pdfs to texts.
