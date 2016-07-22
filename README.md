@@ -11,7 +11,7 @@ This repo comtains the necessary code to reproduce the results and run the WebAp
 The code is organazed in tree folders:
 
 - [email-download](email-download/README.md): Downloads pdfs, converts them to text and store the data in SQLite.
-- [model-script](model-script/README.md): Python scripts to clean the data and build the models.
+- [model-script](model-scripts/README.md): Python scripts to clean the data and build the models.
 - [web-app](web-app/README.md): The code necessary to run the WebApp.
 
 
