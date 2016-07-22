@@ -7,11 +7,11 @@ We believe Email Sherlock can adapted to prevent frauds and avoid classified inf
 
 
 ### Summary
-This repo aim to comtain the necessary to reproduce results and run the WebApp at localhost.
+This repo comtains the necessary code to reproduce the results and run the WebApp on your localhost.
 The code is organazed in tree folders:
 
-- [email-download](): Use to  download, convert pdfs to text and store the data in SQLite.
-- [model-script](): The code to build the model and clean the data.
+- [email-download](): Downloads pdfs, converts them to text and store the data in SQLite.
+- [model-script](): Python scripts to clean the data and build the models.
 - [web-app](): The code necessary to run the WebApp.
 
 
