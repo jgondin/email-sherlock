@@ -2,10 +2,6 @@
 
 In response to a public records request, the U.S. State Department is releasing Hillary Clinton's email messages from her time as secretary of state. Every month, newly released messages are posted to [foia.state.gov](https://foia.state.gov/) as PDFs, with some metadata.
 
-This collection of tools automates downloading and helps analyze the messages. The Wall Steet Journal's interactive graphics team uses some of this code to power our [Clinton inbox search](http://graphics.wsj.com/hillary-clinton-email-documents/) interactive.
-
-We welcome your pull requests and issue reports.
-
 ## What's in the toolkit
 * **run.sh** runs all of the Python scripts in the toolkit automatically, allowing easy updates when messages are released.
 
@@ -16,13 +12,7 @@ We welcome your pull requests and issue reports.
 
 * **HRCEMAIL_names.csv** is a list that pairs sender and recipient names provided by the State Department website with that person's commonly-used name. For example, `HRC` becomes `Hillary Clinton`.
 
-## How to get started
 
-Clone the repo.
-```
-git clone https://github.com/wsjdata/clinton-email-cruncher.git
-cd clinton-email-cruncher
-```
 Install [virtualenv](http://docs.python-guide.org/en/latest/dev/virtualenvs/) if necessary.
 ```
 pip install virtualenv
