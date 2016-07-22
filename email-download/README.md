@@ -45,55 +45,9 @@ Then, run the shell script.
 ./run.sh
 ```
 
-You will need `wget` to download the PDFs. (Mac OS X users can install it using [homebrew](http://brew.sh/).) Downloading the PDFs can take around 30 minutes. If you don't want to download the PDFs, run `./run.sh no-pdf-download`.
+You will need `wget` to download the PDFs and `pdftotext` to convert pdfs to texts.
 
 Finally, load `HRCEMAIL_names.csv` into the `hrcemail.sqlite` database.
 ```
 csvsql --db "sqlite:///hrcemail.sqlite" --insert --no-create --blanks --table name  HRCEMAIL_names.csv 
 ```
-
-## Let's do some analysis!
-
-How many messages did everyone send and receive? Run this SQL query:
-
-```
-sql2csv --db "sqlite:///hrcemail.sqlite" --query 'SELECT commonName,sum(to_count) to_sum, sum(from_count) from_sum, sum(from_count+to_count) total_sum FROM (
-SELECT toName.`commonName`,0 from_count, count(distinct docID) to_count
-FROM document d
-JOIN name toName ON toName.`originalName` = d.`to`
-JOIN name fromName ON fromName.`originalName` = d.`from`
-group by toName.`commonName`
-UNION ALL
-SELECT fromName.`commonName`,count(distinct docID) from_count, 0 to_count
-FROM document d
-JOIN name toName ON toName.`originalName` = d.`to`
-JOIN name fromName ON fromName.`originalName` = d.`from`
-group by fromName.`commonName`
-) t GROUP BY commonName
-ORDER BY total_sum DESC;' | head | csvlook
-```
-
-## How you can help
-
-Are there any names in the `document` table that are not resolved in the `name` table? Use this query to check:
-```
-SELECT d.originalName d,n.originalName n FROM (SELECT distinct `to` originalName
-FROM document
-UNION
-SELECT distinct `from` originalName
-FROM document) d
-LEFT JOIN name n ON TRIM(d.originalName) LIKE n.originalName
-WHERE n.originalName IS NULL;
-```
-Find anything that needs to be updated? Fix the `name` table, export to `HRCEMAIL_names.csv`, and make a pull request.
-```
-sqlite3 -header -csv hrcemail.sqlite "SELECT * FROM name ORDER BY commonName,originalName;" > HRCEMAIL_names.csv 
-```
-
-## Future work
-
-* Extract the time the message was sent or received from the full text
-* Split the full text into constituent messages
-* Develop a list of phrases to remove from the full text (e.g. "PRODUCED TO HOUSE SELECT BENGHAZI COMM")
-* Infer message threads
-* Pair attachments with their messages
