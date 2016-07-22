@@ -2,10 +2,6 @@
 
 In response to a public records request, the U.S. State Department is releasing Hillary Clinton's email messages from her time as secretary of state. Every month, newly released messages are posted to [foia.state.gov](https://foia.state.gov/) as PDFs, with some metadata.
 
-This collection of tools automates downloading and helps analyze the messages. The Wall Steet Journal's interactive graphics team uses some of this code to power our [Clinton inbox search](http://graphics.wsj.com/hillary-clinton-email-documents/) interactive.
-
-We welcome your pull requests and issue reports.
-
 ## What's in the toolkit
 * **run.sh** runs all of the Python scripts in the toolkit automatically, allowing easy updates when messages are released.
 
@@ -16,7 +12,6 @@ We welcome your pull requests and issue reports.
 
 * **HRCEMAIL_names.csv** is a list that pairs sender and recipient names provided by the State Department website with that person's commonly-used name. For example, `HRC` becomes `Hillary Clinton`.
 
-## How to get started
 
 Install [virtualenv](http://docs.python-guide.org/en/latest/dev/virtualenvs/) if necessary.
 ```
@@ -31,21 +26,29 @@ source virt-hrcemail/bin/activate
 
 Install all the Python dependencies. 
 ```
-pip install -r requirements.txt
+pip install -r email-download/requirements.txt
 ```
 
 Install pdftotext.
 ```
+<<<<<<< HEAD
 sudo apt-get update
 sudo apt-get install
 
 ```
 
 Then, run the shell script.
+=======
+./email-download/run.sh
+```
+
+You will need `wget` to download the PDFs and `pdftotext` to convert pdfs to texts.
+>>>>>>> b26227904c86eea74a0255fef9adafdf1f848587
 
 ```
 ./run.sh
 ```
+<<<<<<< HEAD
 
 You will need `wget` to download the PDFs. (Mac OS X users can install it using [homebrew](http://brew.sh/).)
 
@@ -59,3 +62,5 @@ csvsql --db "sqlite:///hrcemail.sqlite" --insert --no-create --blanks --table na
 
 
 This based on ```https://github.com/wsjdata/clinton-email-cruncher.git```, which was slitely modified.
+=======
+>>>>>>> b26227904c86eea74a0255fef9adafdf1f848587
