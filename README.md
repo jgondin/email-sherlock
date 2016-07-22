@@ -1,9 +1,9 @@
 # Email Sherlock:
 ### Using Machine Learning to Extract Information from Large Email Datasets.
 
-Email Sherlock aim to facility many steps of an investigation that make use of large emails dataset, and possibly,
-prevent similar cases, by identify email that contain sensitive or classified information.
+Email Sherlock is specialized search engine that help investigation involving large emails dataset. It works with two steps:  First, it separetes converstaions from noise by clustering with DBSCAN, then it builds a query expation with word2vec.
 
+We believe Email Sherlock can adapted to prevent frauds and avoid classified information being spread.
 
 
 ### Summary
