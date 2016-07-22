@@ -14,4 +14,4 @@ pdf_base = "https://foia.state.gov/searchapp/"
 
 with open('pdflist.txt', 'w') as list_file:
 	for doc in Document.select():
-		list_file.write(pdf_base+doc.pdfLink+"\n")
+		list_file.write("".join([pdf_base, doc.pdfLink, "\n"])

@@ -20,9 +20,10 @@ from subprocess import call
 def extract(filename):
 	try:
 		#file = open('pdfs/'+filename+'.pdf', 'rb')
-		call(['pdftotext', 'pdfs/'+filename+'.pdf', 'txts/'+filename+'.txt'])
+		call(['pdftotext', 'pdfs/' + filename + '.pdf', 'txts/' + filename + '.txt'])
 	except:
 		return None;
+
 	try:
 		#this removes non-ASCII characters. Might not be desirable in some circumstances.
 		#return filter(lambda x: x in string.printable,"\n".join(slate.PDF(file)))
@@ -34,7 +35,8 @@ docIDs = Document.select(Document.docID).where(Document.docText >> None)
 
 for docID in docIDs:
 	filename = docID.docID
-	print "Working on",filename
+	
+	print "Working on", filename
 	output_string = extract(filename)
 	insert_query = Document.update(docText = output_string).where(Document.docID == filename)
 	insert_query.execute()
