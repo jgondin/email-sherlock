@@ -22,7 +22,7 @@ from sklearn.metrics import pairwise_distances
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.metrics import silhouette_samples, silhouette_score
 
-
+import os
 from sklearn.pipeline import Pipeline, make_pipeline
 from sklearn.cluster import KMeans
 
@@ -36,6 +36,7 @@ STOPLIST = set(stopwords.words('english') +
 SYMBOLS = " ".join(string.punctuation).split(" ")
 
 print('load data...')
+print(os.system('ls ../data'))
 
 conn = connect('../data/hrc_emails/hrcemail.sqlite')
 
@@ -43,8 +44,9 @@ conn = connect('../data/hrc_emails/hrcemail.sqlite')
 sql = """
         SELECT d."docID", n.commonName, d."docDate", d."from", d."to", d.subject, d."docText"
         FROM document d JOIN name n ON d."from"=n.originalName 
-        WHERE n.commonName="Hillary Clinton;"
-       """
+        WHERE n.commonName="Hillary Clinton";
+    """
+print(sql)
 df_document = pd.read_sql_query(sql, conn)
 print(df_document.head())
 

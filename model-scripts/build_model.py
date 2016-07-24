@@ -8,7 +8,6 @@ from nltk.corpus import stopwords
 from sklearn.feature_extraction.stop_words import ENGLISH_STOP_WORDS
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from sklearn.decomposition import TruncatedSVD
-from string import punctuation
 from sklearn.cluster import DBSCAN
 
 from sklearn.metrics.pairwise import cosine_similarity, pairwise_distances
@@ -44,7 +43,7 @@ STOP_UNION = STOPLIST | SYMBOLS | WEEK_MONTH
 
 
 print('Loading data...')
-conn = connect('../clinton-email-download/hrcemail2.sqlite')
+conn = connect('../data/hrc_emails/hrcemail2.sqlite')
 
 sql = """SELECT docCleanText FROM document;"""
 df_document = pd.read_sql_query(sql,conn)
@@ -69,12 +68,57 @@ pipe_trans = make_pipeline(vectorizer, svd)
 
 
 print('Transforming imput text...')
-doc_trans = pipe_trans.fit_transform(df_document.docCleanText.values)
+pipe_trans = pipe_trans.fit(df_document.docCleanText.values)
 
 print('Calculating Cosine Similarities...')
+m = df_document.docCleanText.values.shape[0]
+mid = m // 2
 
-dmat = 1 - cosine_similarity(doc_trans)
-# dmat = pairwise_distances(doc_trans,metric='cosine', n_jobs=3)
+X = pipe_trans.transform(df_document.docCleanText.values)
+matrix_similatiry = pairwise_distances(X[:mid], metric='cosine', n_jobs=4)
+print(X.shape)
+
+for i in range(mid,m):
+    #X = pipe_trans.transform(df_document.docCleanText.values[:i])
+    # new_vec = pipe_trans.transform(
+    #     [df_document.docCleanText.values[i]])
+    
+    new_vec = X[i,:]
+    new_vec.resize(1,new_vec.shape[0])
+    
+    newd  = 1 - cosine_similarity(X[:i,:], new_vec)
+    #X = np.insert(X, X.shape[0], new_vec, axis=0)
+    
+    matrix_similatiry = np.insert(matrix_similatiry,
+        matrix_similatiry.shape[1],
+        newd.T, axis=1)
+    
+    newd = np.append(newd, 1.0)
+    
+    matrix_similatiry = np.insert(matrix_similatiry,
+        matrix_similatiry.shape[0],
+        newd, axis=0)        
+
+
+# X = pipe_trans.transform(df_document.docCleanText.values)
+# dmat3 = 1 - cosine_similarity(X)
+# print('shapes:')
+# print(matrix_similatiry.shape,dmat3.shape)
+# print(matrix_similatiry is dmat3)
+# print('matrix_similatiry == dmat3:',sum(sum(matrix_similatiry != dmat3)))
+# d = matrix_similatiry - dmat3
+# print(matrix_similatiry-dmat3)
+# d.resize(1,d.shape[0])
+# print(np.sum(d**2))
+
+
+
+
+doc_trans = pipe_trans.transform(df_document.docCleanText.values)
+
+# #dmat = 1 - cosine_similarity(doc_trans)
+# dmat = pairwise_distances(doc_trans, metric='cosine', n_jobs=3)
+
 print('Pickle doc_trans...')
 joblib.dump(doc_trans,
 	path + '/doc_trans.pkl')
@@ -87,6 +131,8 @@ vectorizer = None
 svd = None
 pipe_trans = None
 
+dmat = matrix_similatiry
+del matrix_similatiry
 
 print('Building Clustering Model...')
 s = dmat.std()
@@ -134,7 +180,7 @@ joblib.dump(model_word2vec,
 print(df_document.head(8))
 
 
-conn = connect('../clinton-email-download/hrcemail2.sqlite')
+conn = connect('../data/hrc_emails/hrcemail2.sqlite')
 
 sql = """SELECT * FROM document;"""
 df_document_all = pd.read_sql_query(sql,conn)
@@ -151,7 +197,7 @@ df_document_all['email_len'] = df_document['email_len']
 
 print(df_document_all.head(16))
 print(df_document_all.shape)
-conn = connect('../clinton-email-download/hrcemail3.sqlite')
+conn = connect('../data/hrc_emails/hrcemail3.sqlite')
 df_document_all.to_sql('document',con=conn, if_exists ='replace', index =False)
 df_document_all = None
 
