@@ -24,7 +24,7 @@ class SearchCluster:
 
         #pickle models
         print('loading models...')
-        path = '/home/gondin/metis/project/clinton-email-clusters'
+        path = '~/project-github'
 
         #vectorizer = joblib.load(path + '/vectorizer.pkl')
         #svd = joblib.load(path + '/svd.pkl')
@@ -129,7 +129,7 @@ class SearchCluster:
 
 print('Create search function')
 searcher = SearchCluster() 
-if True:
+if __name__ == '__main__':
     new = "white house"
     while(new !='exit'):
         new = input('Please, enter the work or sentence or exit to close:')
