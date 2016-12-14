@@ -22,26 +22,26 @@ requests_cache.install_cache("HRCEMAIL_metadata_cache",expire_after=300)
 
 query_base = "https://foia.state.gov/searchapp/Search/SubmitSimpleQuery"
 
-def getAPIPage(start=0,limit=1000,page=1):
+def getAPIPage(start=0, limit=1000, page=1):
 	params = {"searchText": "*",
-	"beginDate": "false",
-	"endDate": "false",
-	"collectionMatch": "Clinton_Email",
-	"postedBeginDate": "false",
-	"postedEndDate": "false",
-	"caseNumber": "false",
-	"page":page,
-	"start": start,
-	"limit": limit}
-	
+		"beginDate": "false",
+		"endDate": "false",
+		"collectionMatch": "Clinton_Email",
+		"postedBeginDate": "false",
+		"postedEndDate": "false",
+		"caseNumber": "false",
+		"page":page,
+		"start": start,
+		"limit": limit}
+		
 	#SSL certificate not verified by certifi module for some reason	
-	request = requests.get(query_base,params=params)
+	request = requests.get(query_base, params=params)
 		
 	return_json = request.text
 	#date objects not valid json, extract timestamp
-	return_json = re.sub(r'new Date\(([0-9]{1,})\)',r'\1',return_json)
+	return_json = re.sub(r'new Date\(([0-9]{1,})\)', r'\1', return_json)
 	#negitive dates are invalid, and can sometimes be shown as newDate()
-	return_json = re.sub(r'new ?Date\((-[0-9]{1,})\)',r'null',return_json)
+	return_json = re.sub(r'new ?Date\((-[0-9]{1,})\)', r'null', return_json)
 	return json.loads(return_json)
 
 def compileResultsList(results_list=[],start=0, limit=1000):

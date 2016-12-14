@@ -1,10 +1,11 @@
 #!/bin/bash
-mkdir -p pdfs/
-mkdir -p txts/
-mkdir -p zips/
+mkdir -p ../../hrc_emails/pdfs/
+mkdir -p ../../hrc_emails/txts/
+mkdir -p ../../hrc_emails/zips/
 source virt-hrcemail/bin/activate
-python downloadMetadata.py
-python generatePDFList.py
+
+python email-download/downloadMetadata.py
+python email-download/generatePDFList.py
 if [ "$1" = "no-pdf-download" ] 
 then 
     echo "skipping PDF download"
@@ -13,6 +14,6 @@ else
 	wget --no-check-certificate --no-clobber --timeout=5 --tries=20 -i ../pdflist.txt
 	cd ..
 fi
-python zipPDFs.py
-python pdfTextToDatabase.py
+python email-download/zipPDFs.py
+python email-download/pdfTextToDatabase.py
 deactivate
